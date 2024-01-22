@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "900359582960",
+    "project_id": "dlala-group-bc8a7",
+    "storage_bucket": "dlala-group-bc8a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900359582960:android:3864e518ed223923b9be35",
+        "android_client_info": {
+          "package_name": "com.example.dlala_group"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSlYl_p_9GBt6D6-g1SnfvK0s3MyluegU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
