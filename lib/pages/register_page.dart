@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key, required void Function() showLoginPage}) : super(key: key);
@@ -17,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   bool _isLoading = false;
-  String? _selectedImage;
+  String? _selectedImagePath;
 
   Future register() async {
     setState(() {
@@ -25,20 +27,26 @@ class _RegisterPageState extends State<RegisterPage> {
     });
 
     try {
+      // Create user with email and password
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      addUserDetails(
+      // Retrieve the current user
+      User? currentUser = FirebaseAuth.instance.currentUser;
+
+      // Add user details to Firestore
+      await addUserDetails(
         _firstNameController.text.trim(),
         _lastNameController.text.trim(),
         _emailController.text.trim(),
-        _selectedImage,
+        _selectedImagePath,
+        currentUser?.uid, // Pass user UID
       );
 
-      // Additional code for sending email verification
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      // Send email verification
+      await currentUser?.sendEmailVerification();
 
       // Show success message to the user
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,18 +73,24 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future addUserDetails(
-      String firstName, String lastName, String email, String? profilePicture) async {
-    await FirebaseFirestore.instance.collection("users").add({
+      String firstName, String lastName, String email, String? profilePicture, String? userId) async {
+    await FirebaseFirestore.instance.collection("users").doc(userId).set({
       "firstName": firstName,
       "lastName": lastName,
       "email": email,
       "profilePicture": profilePicture,
-      // Additional fields can be added as needed
     });
   }
 
   Future<void> _pickImage() async {
-    // Add code to pick an image from the gallery or capture a new one
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImagePath = pickedFile.path;
+      });
+    }
   }
 
   @override
@@ -103,11 +117,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   onTap: _pickImage,
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundImage: _selectedImage != null
-                        ? NetworkImage(_selectedImage!)
+                    backgroundImage: _selectedImagePath != null
+                        ? FileImage(File(_selectedImagePath!))
                         : null,
                     backgroundColor: Colors.grey[300],
-                    child: _selectedImage == null
+                    child: _selectedImagePath == null
                         ? Icon(
                             Icons.camera_alt,
                             size: 40,

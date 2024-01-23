@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey[200], 
+                      color: Colors.grey[200],
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -137,8 +137,8 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return ForgotPasswordPage();
-                          }));
+                                return ForgotPasswordPage();
+                              }));
                         },
                         child: Text(
                           "Forgot password",
@@ -161,22 +161,22 @@ class _LoginPageState extends State<LoginPage> {
                     child: Container(
                       padding: EdgeInsets.all(15.0),
                       decoration: BoxDecoration(
-                        color: Colors.grey, // Set button background color to grey
+                        color: Colors.black, // Set button background color to black
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
                         child: _isLoading
                             ? CircularProgressIndicator(
-                                color: Colors.white,
-                              )
+                          color: Colors.white,
+                        )
                             : Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
+                          "Sign In",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
                       ),
                     ),
                   ),
