@@ -13,7 +13,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //text controller
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
@@ -48,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set background color to white
+      backgroundColor: Colors.white, 
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -58,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 Icon(
                   Icons.person,
                   size: 100,
-                  color: Colors.grey, // Set icon color to grey
+                  color: Colors.deepPurple,
                 ),
                 SizedBox(
                   height: 60,
@@ -67,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                   "Welcome to Dlala Group",
                   style: GoogleFonts.bebasNeue(
                     fontSize: 40,
-                    color: Colors.grey, // Set text color to grey
+                    color: Colors.grey, 
                   ),
                 ),
                 SizedBox(
@@ -78,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Colors.grey[500], // Set text color to grey
+                    color: Colors.grey[500],
                   ),
                 ),
                 SizedBox(
@@ -88,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
+                      border: Border.all(color: Colors.deepPurple),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Padding(
@@ -111,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      border: Border.all(color: Colors.grey),
+                      border: Border.all(color: Colors.deepPurple),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Padding(
@@ -161,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Container(
                       padding: EdgeInsets.all(15.0),
                       decoration: BoxDecoration(
-                        color: Colors.black, // Set button background color to black
+                        color: Colors.deepPurple, 
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
