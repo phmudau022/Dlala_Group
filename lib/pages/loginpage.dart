@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                   "Welcome to Dlala Group",
                   style: GoogleFonts.bebasNeue(
                     fontSize: 40,
-                    color: Colors.grey, 
+                    color: Colors.deepPurple, 
                   ),
                 ),
                 SizedBox(

@@ -23,8 +23,8 @@ class FriendRequestsPage extends StatelessWidget {
           }
 
           final requestsData = snapshot.data!.data() as Map<String, dynamic>;
-          List<String> friendRequests = requestsData['requests'] != null
-              ? List<String>.from(requestsData['requests'])
+          List<Map<String, dynamic>> friendRequests = requestsData['requests'] != null
+              ? List<Map<String, dynamic>>.from(requestsData['requests'])
               : [];
 
           if (friendRequests.isEmpty) {
@@ -34,14 +34,15 @@ class FriendRequestsPage extends StatelessWidget {
           return ListView.builder(
             itemCount: friendRequests.length,
             itemBuilder: (context, index) {
-              String userEmail = friendRequests[index];
+              Map<String, dynamic> requestInfo = friendRequests[index];
+              String senderEmail = requestInfo['senderEmail'];
 
               return ListTile(
-                title: Text('Friend Request from $userEmail'),
+                title: Text('Friend Request from $senderEmail'),
                 trailing: ElevatedButton(
                   onPressed: () {
-                    if (currentUser != null && currentUser.email != userEmail) {
-                      _acceptFriendRequest(context, userEmail);
+                    if (currentUser != null && currentUser.email != senderEmail) {
+                      _acceptFriendRequest(context, senderEmail);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -60,13 +61,13 @@ class FriendRequestsPage extends StatelessWidget {
     );
   }
 
-  void _acceptFriendRequest(BuildContext context, String userEmail) {
-   
-    print('Friend request from $userEmail accepted.');
+  void _acceptFriendRequest(BuildContext context, String senderEmail) {
+    // Implement your logic to accept the friend request.
+    print('Friend request from $senderEmail accepted.');
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Friend request from $userEmail accepted.'),
+        content: Text('Friend request from $senderEmail accepted.'),
       ),
     );
   }

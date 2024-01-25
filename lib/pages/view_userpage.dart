@@ -8,7 +8,8 @@ class ViewUsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('View Users'),
+        title: Text('View Users', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.deepPurple, // Set app bar background color
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
@@ -18,7 +19,7 @@ class ViewUsersPage extends StatelessWidget {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Error: ${snapshot.error}', style: TextStyle(color: Colors.deepPurple)));
           }
 
           final users = snapshot.data!.docs;
@@ -30,8 +31,8 @@ class ViewUsersPage extends StatelessWidget {
               String userEmail = userData['email'];
 
               return ListTile(
-                title: Text('${userData['firstName']} ${userData['lastName']}'),
-                subtitle: Text('Email: $userEmail'),
+                title: Text('${userData['firstName']} ${userData['lastName']}', style: TextStyle(color: Colors.deepPurple)),
+                subtitle: Text('Email: $userEmail', style: TextStyle(color: Colors.deepPurple)),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -48,4 +49,3 @@ class ViewUsersPage extends StatelessWidget {
     );
   }
 }
-

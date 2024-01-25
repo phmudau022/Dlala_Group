@@ -83,22 +83,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Profile'),
+        title: Text('User Profile', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.deepPurple, // Set app bar background color
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Name: ${widget.userData['firstName']} ${widget.userData['lastName']}'),
+            child: Text('Name: ${widget.userData['firstName']} ${widget.userData['lastName']}', style: TextStyle(color: Colors.deepPurple)),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Email: $userEmail'),
+            child: Text('Email: $userEmail', style: TextStyle(color: Colors.deepPurple)),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Invitation Status: $invitationStatus'),
+            child: Text('Invitation Status: $invitationStatus', style: TextStyle(color: Colors.deepPurple)),
           ),
           ElevatedButton(
             onPressed: invitationStatus == 'Invited'
@@ -107,6 +108,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     await _sendFriendInvitation(context, userEmail);
                   },
             child: Text('Send Invitation'),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.deepPurple, 
+            ),
           ),
         ],
       ),

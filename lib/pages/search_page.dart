@@ -1,20 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-class SearchPage extends StatefulWidget {
-  @override
-  _SearchPageState createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
+class SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
+  bool _isLoading = false;
+  String _searchResult = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Lifts'),
+        title: Text('Search Users'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,84 +24,121 @@ class _SearchPageState extends State<SearchPage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                String searchEmail = _searchController.text.trim();
-                User? user = await _searchUserByEmail(searchEmail);
-
-                if (user != null) {
+              onPressed: _isLoading ? null : () => _searchUser(context),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Search'),
+                  if (_isLoading)
+                    SizedBox(
+                      width: 10,
+                    ),
+                  if (_isLoading)
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            if (_searchResult.isNotEmpty)
+              GestureDetector(
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SearchResultPage(user: user),
+                      builder: (context) => UserProfilePage(email: _searchResult),
                     ),
                   );
-                } else {
-                  // User not found, show a message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('No user found with email: $searchEmail'),
-                    ),
-                  );
-                }
-              },
-              child: Text('Search'),
-            ),
+                },
+                child: Text(
+                  _searchResult,
+                  style: TextStyle(
+                    color: _searchResult.contains('found') ? Colors.deepPurple : Colors.red,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 
-  Future<User?> _searchUserByEmail(String email) async {
+  Future<void> _searchUser(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+      _searchResult = '';
+    });
+
     try {
-      // Query Firestore to find a user with the specified email
+      String searchEmail = _searchController.text.trim();
+      bool userExists = await _checkUserExists(searchEmail);
+
+      setState(() {
+        _isLoading = false;
+        if (userExists) {
+          _searchResult = 'User found: $searchEmail';
+        } else {
+          _searchResult = 'User not found';
+        }
+      });
+    } catch (e) {
+      print('Error searching user: $e');
+      setState(() {
+        _isLoading = false;
+        _searchResult = 'Error searching user';
+      });
+    }
+  }
+
+  Future<bool> _checkUserExists(String email) async {
+    try {
       QuerySnapshot users = await FirebaseFirestore.instance
           .collection('users')
           .where('email', isEqualTo: email)
           .limit(1)
           .get();
 
-      // If a user is found, return it
-      if (users.docs.isNotEmpty) {
-        // Extract user data from the Firestore document
-        Map<String, dynamic> userData = users.docs.first.data() as Map<String, dynamic>;
-
-        // Use the extracted email to sign in
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: userData['email'],
-          password: '123456',
-        );
-
-        // Return the user
-        return userCredential.user;
-      } else {
-        return null;
-      }
+      return users.docs.isNotEmpty;
     } catch (e) {
-      print('Error searching user: $e');
-      return null;
+      print('Error checking user existence: $e');
+      return false;
     }
   }
 }
 
-class SearchResultPage extends StatelessWidget {
-  final User user;
+class SearchPage extends StatefulWidget {
+  @override
+  SearchPageState createState() => SearchPageState();
+}
 
-  const SearchResultPage({required this.user});
+class UserProfilePage extends StatelessWidget {
+  final String email;
+
+  UserProfilePage({required this.email});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Results'),
+        title: Text('User Profile'),
       ),
-      body: Column(
-        children: [
-          ListTile(
-            title: Text('User Found'),
-            subtitle: Text('Email: ${user.email}'),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'User Profile',
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Email: $email',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
       ),
     );
   }
